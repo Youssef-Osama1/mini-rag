@@ -54,8 +54,50 @@ The project demonstrates how to go from notebooks to a more production-oriented 
 
 Set your environment variables in the `.env` file. Like `OPENAI_API_KEY` value.
 
+---
+
+## Run Docker Compose Services
+
+```bash
+   $ cd docker
+   $ cp .env.example .env
+```
+
+- Update `.env` with your credentials
+
 ## Run the FastAPI server
 
 ```bash
 $ uvicorn main:app --reload --host 0.0.0.0 --port 5000
 ```
+
+---
+
+## reset docker(assets, ...)
+
+
+   ```bash
+   sudo docker stop $(sudo docker ps -aq)
+   ```
+   
+   ```bash
+   sudo docker rm $(sudo docker ps -aq)
+   ```
+   
+   ```bash
+   sudo docker rmi $(sudo docker images -q)
+   ```
+   
+   ```bash
+   sudo docker volume rm $(sudo docker volume ls -q)
+   ```
+   
+   ```bash
+   sudo docker system prune --all
+   ```
+
+Run docker-compose
+
+   ```bash
+   sudo docker compose up -d
+   ```
