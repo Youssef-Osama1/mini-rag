@@ -1,5 +1,3 @@
-from email import message
-
 from ..LLMInterface import LLMInterface
 from ..LLMEnums import CoHereEnums
 from ..LLMEnums import DocumentTypeEnum
@@ -26,6 +24,7 @@ class CoHereProvider(LLMInterface):
 
         self.client = cohere.Client(api_key = self.api_key)
 
+        self.enums = CoHereEnums
         self.logger = logging.getLogger(__name__)
 
 

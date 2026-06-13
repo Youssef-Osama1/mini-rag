@@ -3,6 +3,7 @@ from ..VectorDBInterface import VectorDBInterface
 from ..VectorDBEnums import DistanceMethodEnums
 from typing import List
 import logging
+from models.db_schemas import RetrievedDocument
 
 
 class QdrantDBProvider(VectorDBInterface):
@@ -84,7 +85,7 @@ class QdrantDBProvider(VectorDBInterface):
             metadata = [None] * len(texts)
 
         if record_ids is None:
-            record_ids = [None] * len(texts)
+            record_ids = list(range(0, len(texts)))
 
         for i in range(0, len(texts), batch_size):
             batch_end = i + batch_size
@@ -123,8 +124,20 @@ class QdrantDBProvider(VectorDBInterface):
 
     def search_by_vector(self, collection_name: str, vector: list, limit: int):
         
-        return self.client.query_points(
+        results = self.client.query_points(
             collection_name=collection_name,
             query=vector,
             limit=limit
         )
+
+        points = results.points
+        if not points:
+            return None
+
+        return [
+            RetrievedDocument(**{
+                "score": point.score,
+                "text": point.payload["text"]
+            })
+            for point in points
+        ]
